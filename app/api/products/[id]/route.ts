@@ -38,6 +38,7 @@ export async function GET(
         category: body.category,
         description: body.description,
         price: body.price,
+        stock: body.stock,
         material: body.material,
         printMethod: body.printMethod,
         imageFront: body.imageFront,

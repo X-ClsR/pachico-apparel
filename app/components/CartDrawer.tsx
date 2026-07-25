@@ -103,22 +103,31 @@ export default function CartDrawer() {
                     -
                   </button>
 
-                  <span>
-                    {item.quantity}
-                  </span>
+                  <div className="text-center">
+  <span>{item.quantity}</span>
+
+  <p className="text-xs text-zinc-500">
+    Stock {item.stock}
+  </p>
+</div>
 
                   <button
-                    onClick={() =>
-                      increaseQuantity(
-                        item.id,
-                        item.color,
-                        item.size
-                      )
-                    }
-                    className="flex h-8 w-8 items-center justify-center rounded bg-zinc-800"
-                  >
-                    +
-                  </button>
+  disabled={item.quantity >= item.stock}
+  onClick={() =>
+    increaseQuantity(
+      item.id,
+      item.color,
+      item.size
+    )
+  }
+  className={`flex h-8 w-8 items-center justify-center rounded ${
+    item.quantity >= item.stock
+      ? "cursor-not-allowed bg-zinc-700 text-zinc-500"
+      : "bg-zinc-800 hover:bg-zinc-700"
+  }`}
+>
+  +
+</button>
 
                   <button
                     onClick={() =>

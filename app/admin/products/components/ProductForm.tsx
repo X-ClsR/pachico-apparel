@@ -22,6 +22,7 @@ useEffect(() => {
     setCategory(product.category);
     setDescription(product.description);
     setPrice(String(product.price));
+    setStock(String(product.stock));
     setMaterial(product.material);
     setPrintMethod(product.printMethod);
     setImageFront(product.imageFront);
@@ -41,6 +42,7 @@ useEffect(() => {
   const [imageFront, setImageFront] = useState("");
   const [imageBack, setImageBack] = useState("");
   const [sizes, setSizes] = useState("");
+  const [stock, setStock] = useState("0");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -50,6 +52,7 @@ useEffect(() => {
   !category ||
   !description ||
   !price ||
+  !stock ||
   !material ||
   !printMethod ||
   !imageFront ||
@@ -65,6 +68,12 @@ if (Number(price) <= 0) {
   return;
 }
 
+    console.log({
+      slug,
+      title,
+      price,
+      stock,
+    });
     const res = await fetch(
   id ? `/api/products/${id}` : "/api/products",
   {
@@ -78,6 +87,7 @@ if (Number(price) <= 0) {
         category,
         description,
         price: Number(price),
+        stock: Number(stock),
         material,
         printMethod,
         imageFront,
@@ -101,6 +111,7 @@ setSlug("");
 setCategory("");
 setDescription("");
 setPrice("");
+setStock("0");
 setMaterial("");
 setPrintMethod("");
 setImageFront("");
@@ -113,8 +124,8 @@ setSizes("");
       className="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-950 p-8"
     >
       <h2 className="text-2xl font-bold">
-        Tambah Produk
-      </h2>
+  {id ? "Edit Produk" : "Tambah Produk"}
+</h2>
 
       <input
       required
@@ -145,6 +156,19 @@ setSizes("");
         onChange={(e) => setPrice(e.target.value)}
         className="w-full rounded-lg bg-zinc-900 p-3"
       />
+      <div className="space-y-2">
+  <label className="text-sm font-semibold">
+    Stock
+  </label>
+
+  <input
+    type="number"
+    value={stock}
+    onChange={(e) => setStock(e.target.value)}
+    className="w-full rounded-xl border border-zinc-800 bg-zinc-950 p-4"
+    placeholder="Stock Produk"
+  />
+</div>
 
       <input
         placeholder="Material"

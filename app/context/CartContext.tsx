@@ -3,6 +3,7 @@
 import {
   createContext,
   useState,
+  useEffect,
   ReactNode,
 } from "react";
 
@@ -14,6 +15,7 @@ export type CartItem = {
   size: string;
   quantity: number;
   price: number;
+  stock: number;
 };
 
 type CartContextType = {
@@ -57,37 +59,51 @@ export function CartProvider({
   children: ReactNode;
 }) {
   const [cart, setCart] = useState<CartItem[]>([]);
+  useEffect(() => {
+  const savedCart = localStorage.getItem("cart");
+
+  if (savedCart) {
+    setCart(JSON.parse(savedCart));
+  }
+}, []);
+useEffect(() => {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}, [cart]);
   const [cartOpen, setCartOpen] =
     useState(false);
 
   function addToCart(item: CartItem) {
-    setCart((prev) => {
-      const exist = prev.find(
-        (i) =>
-          i.id === item.id &&
-          i.color === item.color &&
-          i.size === item.size
-      );
+  setCart((prev) => {
+    const exist = prev.find(
+      (i) =>
+        i.id === item.id &&
+        i.color === item.color &&
+        i.size === item.size
+    );
 
-      if (exist) {
-        return prev.map((i) =>
-          i.id === item.id &&
-          i.color === item.color &&
-          i.size === item.size
-            ? {
-                ...i,
-                quantity:
-                  i.quantity + item.quantity,
-              }
-            : i
-        );
+    if (exist) {
+      const newQty = exist.quantity + item.quantity;
+
+      if (newQty > exist.stock) {
+        alert("Stock produk tidak mencukupi.");
+        return prev;
       }
 
-      return [...prev, item];
-    });
+      return prev.map((i) =>
+        i.id === item.id &&
+        i.color === item.color &&
+        i.size === item.size
+          ? {
+              ...i,
+              quantity: newQty,
+            }
+          : i
+      );
+    }
 
-    
-  }
+    return [...prev, item];
+  });
+}
 
   function removeFromCart(
     id: number,
@@ -107,23 +123,32 @@ export function CartProvider({
   }
 
   function increaseQuantity(
-    id: number,
-    color: string,
-    size: string
-  ) {
-    setCart((prev) =>
-      prev.map((i) =>
+  id: number,
+  color: string,
+  size: string
+) {
+  setCart((prev) =>
+    prev.map((i) => {
+      if (
         i.id === id &&
         i.color === color &&
         i.size === size
-          ? {
-              ...i,
-              quantity: i.quantity + 1,
-            }
-          : i
-      )
-    );
-  }
+      ) {
+        if (i.quantity >= i.stock) {
+          alert("Stock produk tidak mencukupi.");
+          return i;
+        }
+
+        return {
+          ...i,
+          quantity: i.quantity + 1,
+        };
+      }
+
+      return i;
+    })
+  );
+}
 
   function decreaseQuantity(
     id: number,

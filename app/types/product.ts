@@ -6,6 +6,7 @@ export type Product = {
   category: string;
 
   price: number;
+  stock:number;
 
   material: string;
   printMethod: string;

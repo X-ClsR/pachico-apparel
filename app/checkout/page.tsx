@@ -23,7 +23,7 @@ const {
   clearCart,
 } = cartContext;
 
-const { customer, setCustomer } = checkoutContext;
+const { customer, setCustomer, setOrderNumber } = checkoutContext;
 
 
   const subtotal = cart.reduce(
@@ -35,6 +35,7 @@ const { customer, setCustomer } = checkoutContext;
 
   const total = subtotal + shipping;
   async function handleCheckout() {
+
   const res = await fetch("/api/orders", {
     method: "POST",
     headers: {
@@ -49,14 +50,18 @@ const { customer, setCustomer } = checkoutContext;
     }),
   });
 
+  const data = await res.json();
+
   if (!res.ok) {
-    alert("Checkout gagal");
+    alert(data.message);
     return;
   }
 
+  setOrderNumber(data.orderNumber);
+
   clearCart();
 
-router.push("/checkout/success");
+  router.push("/payment");
 }
 
   return (

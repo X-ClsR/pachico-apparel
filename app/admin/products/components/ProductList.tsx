@@ -8,6 +8,7 @@ type Product = {
   title: string;
   category: string;
   price: number;
+  stock: number;
   material: string;
   printMethod: string;
   imageFront: string;
@@ -78,76 +79,104 @@ const filteredProducts = products.filter((product) =>
 <th className="text-left">Print</th>
 <th className="text-left">Ukuran</th>
 <th className="text-left">Harga</th>
+<th className="text-left">Stock</th>
 <th className="text-left">Aksi</th>
             </tr>
           </thead>
 
           <tbody>
-            {filteredProducts.map((product) => (
-              <tr
-                key={product.id}
-                className="border-b border-zinc-900"
-              >
-                <td className="py-4">
-  <div className="flex items-center gap-4">
-    <img
-      src={product.imageFront}
-      alt={product.title}
-      className="h-16 w-16 rounded-xl object-cover border border-zinc-800"
-    />
+  {filteredProducts.map((product) => (
+    <tr
+      key={product.id}
+      className="border-b border-zinc-900"
+    >
+      <td className="py-4">
+        <div className="flex items-center gap-4">
+          <img
+            src={product.imageFront}
+            alt={product.title}
+            className="h-16 w-16 rounded-xl border border-zinc-800 object-cover"
+          />
 
-    <div>
-      <p className="font-semibold">
-        {product.title}
-      </p>
+          <div>
+            <p className="font-semibold">
+              {product.title}
+            </p>
 
-      <p className="text-xs text-zinc-500">
-        #{product.id}
-      </p>
-    </div>
+            <p className="text-xs text-zinc-500">
+              #{product.id}
+            </p>
+          </div>
+        </div>
+      </td>
+
+      <td>
+  <div className="space-y-2">
+    <p>{product.category}</p>
+
+    {product.stock === 0 ? (
+      <span className="rounded-lg bg-red-600 px-3 py-1 text-xs font-bold">
+        SOLD OUT
+      </span>
+    ) : product.stock <= 5 ? (
+      <span className="rounded-lg bg-yellow-500 px-3 py-1 text-xs font-bold text-black">
+        STOCK MENIPIS
+      </span>
+    ) : (
+      <span className="rounded-lg bg-green-600 px-3 py-1 text-xs font-bold">
+        READY
+      </span>
+    )}
   </div>
 </td>
 
-                <td>{product.category}</td>
+      <td>{product.material}</td>
 
-<td>{product.material}</td>
+      <td>{product.printMethod}</td>
 
-<td>{product.printMethod}</td>
+      <td>{product.sizes}</td>
 
-<td>{product.sizes}</td>
-
-<td className="font-bold">
-  Rp {product.price.toLocaleString("id-ID")}
+      <td className="font-bold">
+  {product.stock}
 </td>
 
-<td>
-  {/* tombol edit delete nanti */}
+      <td className="font-bold">
+        Rp {product.price.toLocaleString("id-ID")}
+      </td>
+      <td>
+  <span
+    className={`rounded-lg px-3 py-2 text-sm font-bold ${
+      product.stock > 10
+        ? "bg-green-600"
+        : product.stock > 0
+        ? "bg-yellow-500 text-black"
+        : "bg-red-600"
+    }`}
+  >
+    {product.stock} pcs
+  </span>
 </td>
 
-                <td>
-                  Rp {product.price.toLocaleString("id-ID")}
-                </td>
+      <td>
+        <div className="flex gap-3">
+          <Link
+            href={`/admin/products?id=${product.id}`}
+            className="rounded-lg bg-yellow-500 px-4 py-2 font-bold text-black"
+          >
+            ✏ Edit
+          </Link>
 
-                <td>
-                  <div className="flex justify-center gap-3">
-                    <Link
-                      href={`/admin/products?id=${product.id}`}
-                      className="rounded-lg bg-yellow-500 px-4 py-2 font-bold text-black"
-                    >
-                      Edit
-                    </Link>
-
-                    <button
-                      onClick={() => handleDelete(product.id)}
-                      className="rounded-lg bg-red-600 px-4 py-2 font-bold"
-                    >
-                      Hapus
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+          <button
+            onClick={() => handleDelete(product.id)}
+            className="rounded-lg bg-red-600 px-4 py-2 font-bold"
+          >
+            🗑 Hapus
+          </button>
+        </div>
+      </td>
+    </tr>
+  ))}
+</tbody>
         </table>
       )}
     </div>

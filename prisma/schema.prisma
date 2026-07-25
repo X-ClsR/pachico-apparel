@@ -14,6 +14,7 @@ model Product {
   category    String
   description String
   price       Int
+  stock Int @default(0)
   material    String
   printMethod String
 
@@ -27,6 +28,7 @@ model Product {
 }
   model Order {
   id          Int         @id @default(autoincrement())
+  orderNumber String      @unique
 
   fullName    String
   phone       String
@@ -41,6 +43,8 @@ model Product {
   subtotal    Int
   shipping    Int
   total       Int
+
+  trackingNumber String?
 
   status      String      @default("PENDING")
 

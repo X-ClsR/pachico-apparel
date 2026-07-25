@@ -24,6 +24,8 @@ const {
   addToCart,
 } = cartContext;
 
+const isOutOfStock = product.stock <= 0;
+
   return (
     <main className="min-h-screen bg-black p-10 text-white">
       <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-2">
@@ -46,6 +48,13 @@ const {
           <p className="mt-6 text-3xl font-bold">
             Rp {product.price.toLocaleString("id-ID")}
           </p>
+
+          <p className="mt-2 text-sm text-zinc-400">
+  Stock tersedia :{" "}
+  <span className="font-bold">
+    {product.stock}
+  </span>
+</p>
 
           <p className="mt-6">
             <strong>Material :</strong> {product.material}
@@ -93,46 +102,72 @@ const {
 
   <div className="flex items-center gap-4">
 
-    <button
-      onClick={() =>
-        setQuantity(Math.max(1, quantity - 1))
+  <button
+    disabled={quantity <= 1}
+    onClick={() => {
+      if (quantity > 1) {
+        setQuantity(quantity - 1);
       }
-      className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-xl hover:bg-zinc-700"
-    >
-      -
-    </button>
+    }}
+    className={`flex h-10 w-10 items-center justify-center rounded-full text-xl font-bold ${
+      quantity <= 1
+        ? "cursor-not-allowed bg-zinc-700 text-zinc-500"
+        : "bg-zinc-800 text-white hover:bg-zinc-700"
+    }`}
+  >
+    -
+  </button>
 
-    <span className="w-8 text-center text-xl font-bold">
-      {quantity}
-    </span>
+  <span className="w-8 text-center text-xl font-bold">
+    {quantity}
+  </span>
 
-    <button
-      onClick={() =>
-        setQuantity(quantity + 1)
+  <button
+    disabled={quantity >= product.stock}
+    onClick={() => {
+      if (quantity < product.stock) {
+        setQuantity(quantity + 1);
       }
-      className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-xl hover:bg-zinc-700"
-    >
-      +
-    </button>
+    }}
+    className={`flex h-10 w-10 items-center justify-center rounded-full text-xl font-bold ${
+      quantity >= product.stock
+        ? "cursor-not-allowed bg-zinc-700 text-zinc-500"
+        : "bg-zinc-800 text-white hover:bg-zinc-700"
+    }`}
+  >
+    +
+  </button>
 
-  </div>
+  <p className="ml-4 text-sm text-zinc-500">
+    Stock tersedia : {product.stock}
+  </p>
+
+</div>
 </div>
 
           <button
+  disabled={isOutOfStock}
   onClick={() =>
     addToCart({
-  id: product.id,
-  title: product.title,
-  color: "Default",
-  size: selectedSize,
-  quantity,
-  price: product.price,
-  image: product.imageFront,
-})
+      id: product.id,
+      title: product.title,
+      color: "Default",
+      size: selectedSize,
+      quantity,
+      price: product.price,
+      image: product.imageFront,
+      stock: product.stock,
+    })
   }
-  className="mt-10 rounded-lg bg-white px-8 py-4 font-bold text-black transition hover:scale-105"
+  className={`mt-10 rounded-lg px-8 py-4 font-bold transition ${
+    isOutOfStock
+      ? "cursor-not-allowed bg-zinc-700 text-zinc-400"
+      : "bg-white text-black hover:scale-105"
+  }`}
 >
-  TAMBAH KE KERANJANG
+  {isOutOfStock
+    ? "STOK HABIS"
+    : "TAMBAH KE KERANJANG"}
 </button>
         </div>
       </div>

@@ -21,6 +21,12 @@ type CheckoutContextType = {
   setCustomer: React.Dispatch<
     React.SetStateAction<CustomerData>
   >;
+
+  orderNumber: string;
+
+  setOrderNumber: React.Dispatch<
+    React.SetStateAction<string>
+  >;
 };
 
 export const CheckoutContext =
@@ -45,11 +51,16 @@ export function CheckoutProvider({
       address: "",
     });
 
+  const [orderNumber, setOrderNumber] =
+    useState("");
+
   return (
     <CheckoutContext.Provider
       value={{
         customer,
         setCustomer,
+        orderNumber,
+        setOrderNumber,
       }}
     >
       {children}

@@ -6,11 +6,19 @@ async function main() {
   await prisma.product.create({
     data: {
       slug: "pachico-signature",
+
       title: "PACHICO SIGNATURE",
+
       category: "KAOS",
+
       description: "Premium Streetwear T-Shirt",
+
       price: 129000,
+
+      stock: 20,
+
       material: "Cotton Combed 24s",
+
       printMethod: "Premium DTF",
 
       imageFront:

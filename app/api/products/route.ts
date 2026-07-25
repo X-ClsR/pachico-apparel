@@ -4,7 +4,8 @@ import { prisma } from "@/app/lib/prisma";
 export async function GET() {
   const products = await prisma.product.findMany({
     orderBy: {
-      createdAt: "desc",
+      createdAt: "desc"
+      
     },
   });
 
@@ -17,20 +18,20 @@ export async function POST(req: Request) {
 
     const product = await prisma.product.create({
       data: {
-        slug: body.slug,
-        title: body.title,
-        category: body.category,
-        description: body.description,
-        price: Number(body.price),
+  slug: body.slug,
+  title: body.title,
+  category: body.category,
+  description: body.description,
 
-        material: body.material,
-        printMethod: body.printMethod,
+  price: Number(body.price),
+  stock: Number(body.stock),
 
-        imageFront: body.imageFront,
-        imageBack: body.imageBack,
-
-        sizes: body.sizes,
-      },
+  material: body.material,
+  printMethod: body.printMethod,
+  imageFront: body.imageFront,
+  imageBack: body.imageBack,
+  sizes: body.sizes,
+},
     });
 
     return NextResponse.json(product, {
