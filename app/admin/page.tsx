@@ -1,6 +1,7 @@
 import SalesChart from "../components/SalesChart";
 import { prisma } from "@/app/lib/prisma";
 
+export const dynamic = "force-dynamic";
 export default async function AdminDashboard() {
 
   const totalProducts = await prisma.product.count();

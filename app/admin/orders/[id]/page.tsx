@@ -2,6 +2,7 @@ import { prisma } from "@/app/lib/prisma";
 import { notFound } from "next/navigation";
 import AdminOrderForm from "./AdminOrderForm";
 
+export const dynamic = "force-dynamic";
 type Props = {
   params: Promise<{
     id: string;
