@@ -1,22 +1,25 @@
-"use client";
-
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 
-export default function SuccessPage() {
-  const searchParams = useSearchParams();
+type Props = {
+  searchParams: Promise<{
+    order?: string;
+  }>;
+};
 
-  const orderNumber =
-    searchParams.get("order") ?? "-";
+export default async function SuccessPage({
+  searchParams,
+}: Props) {
+  const params = await searchParams;
+
+  const orderNumber = params.order ?? "-";
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-black px-6 text-white">
-
       <div className="w-full max-w-xl rounded-2xl border border-zinc-800 bg-zinc-950 p-10 text-center">
 
         <div className="mb-6 text-6xl">
-  ✅
-</div>
+          ✅
+        </div>
 
         <h1 className="text-4xl font-black">
           PESANAN BERHASIL
@@ -30,7 +33,6 @@ export default function SuccessPage() {
         </p>
 
         <div className="mt-10 rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-
           <p className="text-sm uppercase tracking-widest text-zinc-500">
             ORDER NUMBER
           </p>
@@ -38,7 +40,6 @@ export default function SuccessPage() {
           <h2 className="mt-3 text-3xl font-black text-green-400">
             {orderNumber}
           </h2>
-
         </div>
 
         <p className="mt-8 text-sm leading-7 text-zinc-500">
@@ -48,7 +49,6 @@ export default function SuccessPage() {
         </p>
 
         <div className="mt-10 flex flex-col gap-4">
-
           <Link
             href="/tracking"
             className="rounded-xl bg-white py-4 font-bold text-black transition hover:scale-105"
@@ -62,11 +62,9 @@ export default function SuccessPage() {
           >
             Kembali Belanja
           </Link>
-
         </div>
 
       </div>
-
     </main>
   );
 }

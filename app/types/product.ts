@@ -6,7 +6,7 @@ export type Product = {
   category: string;
 
   price: number;
-  stock:number;
+  stock: number;
 
   material: string;
   printMethod: string;
@@ -16,7 +16,7 @@ export type Product = {
   imageFront: string;
   imageBack: string;
 
-  sizes: string[];
+  sizes: string;
 
   createdAt?: Date;
   updatedAt?: Date;

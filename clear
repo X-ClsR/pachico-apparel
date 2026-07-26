@@ -1,7 +1,23 @@
-
 import ProductCard from "./ProductCard";
-import type { Product } from "@/app/types/product";
-;
+
+type Product = {
+  id: number;
+  slug: string;
+  title: string;
+  category: string;
+  description: string;
+  price: number;
+
+  stock: number;
+
+  material: string;
+  printMethod: string;
+
+  imageFront: string;
+  imageBack: string;
+
+  sizes: string[];
+};
 
 async function getProducts(): Promise<Product[]> {
   const res = await fetch("http://localhost:3000/api/products", {
