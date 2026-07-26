@@ -19,14 +19,13 @@ export default async function ProductSection() {
         OUR PRODUCTS
       </h2>
 
-      <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-3">
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-          />
-        ))}
-      </div>
+      <div className="mx-auto max-w-6xl text-white">
+  {products.map((product) => (
+    <div key={product.id}>
+      {product.title}
+    </div>
+  ))}
+</div>
     </section>
   );
 }
