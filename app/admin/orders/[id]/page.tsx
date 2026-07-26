@@ -1,25 +1,32 @@
 import { prisma } from "@/app/lib/prisma";
-import OrdersTable from "./components/OrdersTable";
+import { notFound } from "next/navigation";
+import AdminOrderForm from "./AdminOrderForm";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminOrdersPage() {
-  const orders = await prisma.order.findMany({
-    orderBy: {
-      createdAt: "desc",
+type Props = {
+  params: Promise<{
+    id: string;
+  }>;
+};
+
+export default async function OrderDetail({
+  params,
+}: Props) {
+  const { id } = await params;
+
+  const order = await prisma.order.findUnique({
+    where: {
+      id: Number(id),
     },
     include: {
       items: true,
     },
   });
 
-  return (
-    <main className="min-h-screen bg-black p-8 text-white">
-      <h1 className="mb-8 text-4xl font-black">
-        ADMIN ORDERS
-      </h1>
+  if (!order) {
+    notFound();
+  }
 
-      <OrdersTable orders={orders} />
-    </main>
-  );
+  return <AdminOrderForm order={order} />;
 }
