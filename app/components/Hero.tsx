@@ -14,9 +14,12 @@ export default function Hero() {
         Crafted For The Bold
       </p>
 
-      <button className="mt-10 rounded-md border border-white px-8 py-3 transition hover:bg-white  hover:text-black">
-        SHOP NOW
-      </button>
+      <a
+  href="#products"
+  className="mt-10 rounded-md border border-white px-8 py-3 transition hover:bg-white hover:text-black"
+>
+  SHOP NOW
+</a>
 
     </section>
   );

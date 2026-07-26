@@ -14,7 +14,10 @@ export default async function ProductSection() {
   const products = await getProducts();
 
   return (
-    <section className="bg-black px-6 py-20">
+    <section
+  id="products"
+  className="bg-black px-6 py-20"
+>
       <h2 className="mb-12 text-center text-4xl font-bold text-white">
         OUR PRODUCTS
       </h2>
