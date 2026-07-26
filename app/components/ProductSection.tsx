@@ -1,32 +1,21 @@
-import ProductCard from "./ProductCard";
-import type { Product } from "@/app/types/product";
 import { prisma } from "@/app/lib/prisma";
 
-async function getProducts(): Promise<Product[]> {
-  return prisma.product.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-}
-
 export default async function ProductSection() {
-  const products = await getProducts();
+  const products = await prisma.product.findMany();
 
   return (
-    <section className="bg-black px-6 py-20">
-      <h2 className="mb-12 text-center text-4xl font-bold text-white">
-        OUR PRODUCTS
-      </h2>
+    <section className="bg-red-600 p-10 text-white">
+      <h1 className="text-5xl">
+        TEST PRODUCT SECTION
+      </h1>
 
-      <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-3">
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-          />
-        ))}
-      </div>
+      <p>Total Product: {products.length}</p>
+
+      {products.map((p) => (
+        <div key={p.id}>
+          {p.title}
+        </div>
+      ))}
     </section>
   );
 }
