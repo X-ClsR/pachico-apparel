@@ -2,10 +2,20 @@
 
 import { useState } from "react";
 
+type Order = {
+  id: number;
+  orderNumber: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  status: string;
+  trackingNumber: string | null;
+};
+
 export default function AdminOrderForm({
   order,
 }: {
-  order: any;
+  order: Order;
 }) {
   const [status, setStatus] = useState(order.status);
 
