@@ -1,18 +1,13 @@
-
 import ProductCard from "./ProductCard";
 import type { Product } from "@/app/types/product";
-;
+import { prisma } from "@/app/lib/prisma";
 
 async function getProducts(): Promise<Product[]> {
-  const res = await fetch("http://localhost:3000/api/products", {
-    cache: "no-store",
+  return prisma.product.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
   });
-
-  if (!res.ok) {
-    throw new Error("Gagal mengambil produk");
-  }
-
-  return res.json();
 }
 
 export default async function ProductSection() {
