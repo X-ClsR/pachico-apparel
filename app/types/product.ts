@@ -16,7 +16,7 @@ export type Product = {
   imageFront: string;
   imageBack: string;
 
-  sizes: string;
+  sizes: string[];
 
   createdAt?: Date;
   updatedAt?: Date;

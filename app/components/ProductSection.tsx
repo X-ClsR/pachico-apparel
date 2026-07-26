@@ -7,11 +7,16 @@ type Product = {
   category: string;
   description: string;
   price: number;
+
+  stock: number;
+
   material: string;
   printMethod: string;
+
   imageFront: string;
   imageBack: string;
-  sizes: string;
+
+  sizes: string[];
 };
 
 async function getProducts(): Promise<Product[]> {
@@ -39,19 +44,7 @@ export default async function ProductSection() {
         {products.map((product) => (
           <ProductCard
             key={product.id}
-            product={{
-              ...product,
-              colors: [
-                {
-                  name: "Black",
-                  images: [
-                    product.imageFront,
-                    product.imageBack,
-                  ],
-                },
-              ],
-              sizes: product.sizes.split(","),
-            }}
+            product={product}
           />
         ))}
       </div>

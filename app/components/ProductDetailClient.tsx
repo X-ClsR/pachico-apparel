@@ -11,7 +11,7 @@ type Props = {
 
 export default function ProductDetailClient({ product }: Props) {
   
-  const sizeList = product.sizes.split(",");
+  const sizeList = product.sizes;
 
 const [selectedSize, setSelectedSize] =
 useState(sizeList[0]);
