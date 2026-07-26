@@ -1,37 +1,32 @@
-import Link from "next/link";
-import type { Product } from "../types/product";
+import ProductCard from "./ProductCard";
+import type { Product } from "@/app/types/product";
+import { prisma } from "@/app/lib/prisma";
 
-type ProductCardProps = {
-  product: Product;
-};
+async function getProducts(): Promise<Product[]> {
+  return prisma.product.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+}
 
-export default function ProductCard({
-  product,
-}: ProductCardProps) {
+export default async function ProductSection() {
+  const products = await getProducts();
+
   return (
-    <Link
-      href={`/product/${product.slug}`}
-      className="block rounded-xl border border-zinc-800 bg-zinc-950 overflow-hidden hover:border-white transition"
-    >
-      <img
-        src={product.imageFront}
-        alt={product.title}
-        className="aspect-square w-full object-cover"
-      />
+    <section className="bg-black px-6 py-20">
+      <h2 className="mb-12 text-center text-4xl font-bold text-white">
+        OUR PRODUCTS
+      </h2>
 
-      <div className="p-5">
-        <h2 className="text-xl font-bold text-white">
-          {product.title}
-        </h2>
-
-        <p className="mt-2 text-zinc-400">
-          {product.category}
-        </p>
-
-        <p className="mt-4 text-2xl font-bold text-white">
-          Rp {product.price.toLocaleString("id-ID")}
-        </p>
+      <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-3">
+        {products.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+          />
+        ))}
       </div>
-    </Link>
+    </section>
   );
 }
