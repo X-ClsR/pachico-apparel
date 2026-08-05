@@ -38,8 +38,7 @@ export default function OrdersTable({
 }) {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
-const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   const filteredOrders = orders.filter((order) => {
     const keyword = search.toLowerCase();
@@ -84,175 +83,168 @@ const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
       </p>
 
       {filteredOrders.map((order) => (
-  <div
-    key={order.id}
-    className="rounded-2xl border border-zinc-800 bg-zinc-950 p-6"
-  >
-    <div className="flex items-start justify-between">
+        <div
+          key={order.id}
+          className="rounded-2xl border border-zinc-800 bg-zinc-950 p-6"
+        >
+          <div className="flex items-start justify-between">
 
-      {/* LEFT */}
-      <div className="flex-1">
+            <div className="flex-1">
 
-        <h2 className="text-2xl font-bold">
-          {order.fullName}
-        </h2>
+              <h2 className="text-2xl font-bold">
+                {order.fullName}
+              </h2>
 
-        <p className="text-zinc-400">
-          📞 {order.phone}
-        </p>
+              <p className="text-zinc-400">
+                📞 {order.phone}
+              </p>
 
-        <p className="text-zinc-400">
-          ✉ {order.email}
-        </p>
+              <p className="text-zinc-400">
+                ✉ {order.email}
+              </p>
 
-        <p className="mt-2 text-sm text-zinc-500">
-          📅{" "}
-          {new Date(order.createdAt).toLocaleString("id-ID", {
-            dateStyle: "long",
-            timeStyle: "short",
-          })}
-        </p>
+              <p className="mt-2 text-sm text-zinc-500">
+                📅{" "}
+                {new Date(order.createdAt).toLocaleString("id-ID", {
+                  dateStyle: "long",
+                  timeStyle: "short",
+                })}
+              </p>
 
-        <div className="mt-5 flex flex-wrap gap-4">
+              <div className="mt-5 flex flex-wrap gap-4">
 
-          {/* CARD ALAMAT */}
-          <div className="min-w-[320px] flex-1 rounded-xl bg-zinc-900 p-4">
+                <div className="min-w-[320px] flex-1 rounded-xl bg-zinc-900 p-4">
 
-            <p className="mb-3 text-sm font-semibold text-zinc-400">
-              📍 Alamat Pengiriman
-            </p>
+                  <p className="mb-3 text-sm font-semibold text-zinc-400">
+                    📍 Alamat Pengiriman
+                  </p>
 
-            <p>{order.address}</p>
-            <p>{order.district}</p>
-            <p>{order.city}</p>
-            <p>{order.province}</p>
-            <p>{order.postalCode}</p>
+                  <p>{order.address}</p>
+                  <p>{order.district}</p>
+                  <p>{order.city}</p>
+                  <p>{order.province}</p>
+                  <p>{order.postalCode}</p>
+
+                </div>
+
+                <div className="w-64 rounded-xl bg-zinc-900 p-4">
+
+                  <p className="text-sm text-zinc-500">
+                    Total Belanja
+                  </p>
+
+                  <h2 className="mt-2 text-3xl font-black">
+                    Rp {order.total.toLocaleString("id-ID")}
+                  </h2>
+
+                  <div className="mt-4">
+                    <StatusBadge status={order.status} />
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div className="ml-6 flex w-64 shrink-0 flex-col gap-3">
+
+              <button
+                onClick={() => setSelectedOrder(order)}
+                className="w-full rounded-xl bg-blue-600 px-4 py-2 font-bold hover:bg-blue-500"
+              >
+                👁 Lihat Detail
+              </button>
+
+              <OrderStatus
+                id={order.id}
+                currentStatus={order.status}
+                trackingNumber={order.trackingNumber}
+              />
+
+              <button
+                onClick={() => {
+                  const alamat =
+                    order.fullName + "\n" +
+                    order.phone + "\n\n" +
+                    order.address + "\n" +
+                    order.district + "\n" +
+                    order.city + "\n" +
+                    order.province + "\n" +
+                    order.postalCode;
+
+                  navigator.clipboard.writeText(alamat);
+
+                  alert("Alamat berhasil disalin!");
+                }}
+                className="w-full rounded-xl bg-zinc-800 px-4 py-2 text-sm font-semibold hover:bg-zinc-700"
+              >
+                📋 Copy Alamat
+              </button>
+
+              <a
+                href={"https://wa.me/" + order.phone.replace(/^0/, "62")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full rounded-xl bg-green-600 px-4 py-2 text-center text-sm font-bold hover:bg-green-500"
+              >
+                💬 WhatsApp
+              </a>
+
+            </div>
 
           </div>
 
-          {/* CARD TOTAL */}
-          <div className="w-64 rounded-xl bg-zinc-900 p-4">
+          <div className="mt-6 rounded-xl bg-zinc-900 p-5">
 
-            <p className="text-sm text-zinc-500">
-              Total Belanja
+            <p className="mb-4 font-semibold">
+              Item Pesanan
             </p>
 
-            <h2 className="mt-2 text-3xl font-black">
-              Rp {order.total.toLocaleString("id-ID")}
-            </h2>
+            <div className="space-y-3">
 
-            <div className="mt-4">
-              <StatusBadge status={order.status} />
+              {order.items.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between border-b border-zinc-800 py-3 last:border-0"
+                >
+
+                  <div>
+                    <p className="font-bold">
+                      {item.title}
+                    </p>
+
+                    <p className="text-sm text-zinc-500">
+                      {item.color} • {item.size}
+                    </p>
+                  </div>
+
+                  <div className="text-right">
+                    <p className="text-sm">
+                      Qty {item.quantity}
+                    </p>
+
+                    <p className="font-bold">
+                      Rp {item.price.toLocaleString("id-ID")}
+                    </p>
+                  </div>
+
+                </div>
+              ))}
+
             </div>
 
           </div>
 
         </div>
-
-      </div>
-
-      {/* RIGHT */}
-      <button
-  onClick={() => setSelectedOrder(order)}
-  className="mb-3 w-full rounded-xl bg-blue-600 px-4 py-2 font-bold hover:bg-blue-500"
->
-  👁 Lihat Detail
-</button>
-<div className="ml-6">
-
-        <OrderStatus
-  id={order.id}
-  currentStatus={order.status}
-  trackingNumber={order.trackingNumber}
-/>
-        <button
-  onClick={() => {
-    navigator.clipboard.writeText(`
-${order.fullName}
-${order.phone}
-
-${order.address}
-${order.district}
-${order.city}
-${order.province}
-${order.postalCode}
-    `);
-
-    alert("Alamat berhasil disalin!");
-  }}
-  className="rounded-xl bg-zinc-800 px-4 py-2 text-sm font-semibold hover:bg-zinc-700"
->
-  📋 Copy Alamat
-</button>
-<a
-  href={`https://wa.me/${order.phone.replace(/^0/, "62")}`}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="rounded-xl bg-green-600 px-4 py-2 text-sm font-bold hover:bg-green-500"
->
-  💬 WhatsApp
-</a>
-
-      </div>
-
-    </div>
-
-    {/* ITEM */}
-
-    <div className="mt-6 rounded-xl bg-zinc-900 p-5">
-
-      <p className="mb-4 font-semibold">
-        Item Pesanan
-      </p>
-
-      <div className="space-y-3">
-
-        {order.items.map((item) => (
-          <div
-            key={item.id}
-            className="flex items-center justify-between border-b border-zinc-800 py-3 last:border-0"
-          >
-
-            <div>
-
-              <p className="font-bold">
-                {item.title}
-              </p>
-
-              <p className="text-sm text-zinc-500">
-                {item.color} • {item.size}
-              </p>
-
-            </div>
-
-            <div className="text-right">
-
-              <p className="text-sm">
-                Qty {item.quantity}
-              </p>
-
-              <p className="font-bold">
-                Rp {item.price.toLocaleString("id-ID")}
-              </p>
-
-            </div>
-
-          </div>
-        ))}
-
-      </div>
-
-    </div>
-
-  </div>
-))}
+      ))}
 
       {selectedOrder && (
-  <OrderDetailModal
-    order={selectedOrder}
-    onClose={() => setSelectedOrder(null)}
-  />
-)}
+        <OrderDetailModal
+          order={selectedOrder}
+          onClose={() => setSelectedOrder(null)}
+        />
+      )}
 
     </div>
   );

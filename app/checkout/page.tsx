@@ -197,7 +197,19 @@ const { customer, setCustomer, setOrderNumber } = checkoutContext;
 
             <div>
 
-              <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-8">
+              <div className="relative overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950 p-8">
+
+                {/* Watermark logo */}
+                <Image
+                  src="/images/logo/pachico-logo.png"
+                  alt=""
+                  width={320}
+                  height={320}
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -bottom-10 -right-10 w-64 select-none opacity-[0.06]"
+                />
+
+                <div className="relative">
 
                 <h2 className="mb-8 text-2xl font-bold">
                   RINGKASAN PESANAN
@@ -282,6 +294,8 @@ const { customer, setCustomer, setOrderNumber } = checkoutContext;
 >
   BAYAR SEKARANG
 </button>
+
+                </div>
 
               </div>
 

@@ -1,34 +1,42 @@
 "use client";
 
-import { CldUploadWidget } from "next-cloudinary";
-
 type Props = {
   onUpload: (url: string) => void;
 };
 
 export default function ImageUploader({ onUpload }: Props) {
-  return (
-    <div className="space-y-4">
-      <CldUploadWidget
-        uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!}
-        onSuccess={(result) => {
-          const info = result?.info as { secure_url?: string };
+  async function handleUpload(
+    e: React.ChangeEvent<HTMLInputElement>
+  ) {
+    const file = e.target.files?.[0];
 
-          if (info?.secure_url) {
-            onUpload(info.secure_url);
-          }
-        }}
-      >
-        {({ open }) => (
-          <button
-            type="button"
-            onClick={() => open()}
-            className="rounded-xl bg-white px-6 py-3 font-bold text-black"
-          >
-            Upload Gambar
-          </button>
-        )}
-      </CldUploadWidget>
-    </div>
+    if (!file) return;
+
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    const res = await fetch("/api/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error);
+      return;
+    }
+
+    onUpload(data.url);
+  }
+
+  return (
+    <input
+      type="file"
+      accept="image/*"
+      onChange={handleUpload}
+      className="block w-full rounded-lg border border-zinc-700 p-3"
+    />
   );
 }

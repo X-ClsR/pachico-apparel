@@ -14,9 +14,11 @@ type Product = {
   imageFront: string;
   sizes: string;
 };
+
 export default function ProductList() {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
+  const [openMenu, setOpenMenu] = useState<number | null>(null);
 
   async function loadProducts() {
     const res = await fetch("/api/products", {
@@ -24,21 +26,18 @@ export default function ProductList() {
     });
 
     const data = await res.json();
-
     setProducts(data);
   }
 
   async function handleDelete(id: number) {
-    const confirmDelete = confirm("Yakin ingin menghapus produk?");
-
-    if (!confirmDelete) return;
+    if (!confirm("Yakin ingin menghapus produk?")) return;
 
     const res = await fetch(`/api/products/${id}`, {
       method: "DELETE",
     });
 
     if (!res.ok) {
-      alert("Gagal menghapus produk.");
+      alert("Gagal menghapus produk");
       return;
     }
 
@@ -48,137 +47,160 @@ export default function ProductList() {
   useEffect(() => {
     loadProducts();
   }, []);
-const filteredProducts = products.filter((product) =>
-  product.title.toLowerCase().includes(search.toLowerCase()) ||
-  product.category.toLowerCase().includes(search.toLowerCase())
-);
-  return (
-    <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-8">
-      <h2 className="mb-6 text-2xl font-bold">
-        Daftar Produk
-      </h2>
-      <input
-  type="text"
-  placeholder="Cari produk..."
-  value={search}
-  onChange={(e) => setSearch(e.target.value)}
-  className="mb-6 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-3 outline-none focus:border-white"
-/>
 
-      {products.length === 0 ? (
-        <p className="text-zinc-500">
-          Belum ada produk.
-        </p>
-      ) : (
-        <table className="w-full">
+  const filteredProducts = products.filter(
+    (product) =>
+      product.title.toLowerCase().includes(search.toLowerCase()) ||
+      product.category.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div className="rounded-2xl bg-[#353839] p-7">
+
+      <div className="mb-7 flex items-center justify-between">
+
+        <h2 className="text-3xl font-bold text-[#FFFAF0]">
+          Daftar Produk
+        </h2>
+
+        <input
+          type="text"
+          placeholder="Cari produk..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-72 rounded-xl bg-[#111111] px-4 py-3 text-[#FFFAF0] outline-none"
+        />
+
+      </div>
+
+      <div className="overflow-x-auto rounded-xl border border-zinc-800">
+
+        <table className="w-full border-collapse text-left text-sm">
+
           <thead>
-            <tr className="border-b border-zinc-800">
-              <th className="py-4 text-left">Produk</th>
-<th className="text-left">Kategori</th>
-<th className="text-left">Material</th>
-<th className="text-left">Print</th>
-<th className="text-left">Ukuran</th>
-<th className="text-left">Harga</th>
-<th className="text-left">Stock</th>
-<th className="text-left">Aksi</th>
+            <tr className="border-b border-zinc-800 bg-[#111111] text-xs uppercase tracking-wide text-zinc-500">
+              <th className="px-4 py-3 font-medium">Produk</th>
+              <th className="px-4 py-3 font-medium">Kategori</th>
+              <th className="px-4 py-3 font-medium">Material</th>
+              <th className="px-4 py-3 font-medium">Print</th>
+              <th className="px-4 py-3 font-medium">Ukuran</th>
+              <th className="px-4 py-3 font-medium">Harga</th>
+              <th className="px-4 py-3 font-medium">Stock</th>
+              <th className="px-4 py-3 font-medium">Status</th>
+              <th className="px-4 py-3 font-medium text-right">Aksi</th>
             </tr>
           </thead>
 
           <tbody>
-  {filteredProducts.map((product) => (
-    <tr
-      key={product.id}
-      className="border-b border-zinc-900"
-    >
-      <td className="py-4">
-        <div className="flex items-center gap-4">
-          <img
-            src={product.imageFront}
-            alt={product.title}
-            className="h-16 w-16 rounded-xl border border-zinc-800 object-cover"
-          />
+            {filteredProducts.map((product) => (
 
-          <div>
-            <p className="font-semibold">
-              {product.title}
-            </p>
+              <tr
+                key={product.id}
+                className="border-b border-zinc-800 last:border-0 hover:bg-[#111111]/60"
+              >
 
-            <p className="text-xs text-zinc-500">
-              #{product.id}
-            </p>
-          </div>
-        </div>
-      </td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center gap-3">
 
-      <td>
-  <div className="space-y-2">
-    <p>{product.category}</p>
+                    <img
+                      src={product.imageFront || "/placeholder-product.png"}
+                      alt={product.title}
+                      className="h-12 w-12 shrink-0 rounded-lg object-cover"
+                    />
 
-    {product.stock === 0 ? (
-      <span className="rounded-lg bg-red-600 px-3 py-1 text-xs font-bold">
-        SOLD OUT
-      </span>
-    ) : product.stock <= 5 ? (
-      <span className="rounded-lg bg-yellow-500 px-3 py-1 text-xs font-bold text-black">
-        STOCK MENIPIS
-      </span>
-    ) : (
-      <span className="rounded-lg bg-green-600 px-3 py-1 text-xs font-bold">
-        READY
-      </span>
-    )}
-  </div>
-</td>
+                    <div>
+                      <p className="font-bold text-[#FFFAF0]">
+                        {product.title}
+                      </p>
+                      <p className="text-xs text-zinc-500">#{product.id}</p>
+                    </div>
 
-      <td>{product.material}</td>
+                  </div>
+                </td>
 
-      <td>{product.printMethod}</td>
+                <td className="px-4 py-3 text-zinc-300">{product.category}</td>
+                <td className="px-4 py-3 text-zinc-300">{product.material}</td>
+                <td className="px-4 py-3 text-zinc-300">{product.printMethod}</td>
+                <td className="px-4 py-3 text-zinc-300">{product.sizes}</td>
 
-      <td>{product.sizes}</td>
+                <td className="px-4 py-3 font-bold text-[#FFFAF0]">
+                  Rp {product.price.toLocaleString("id-ID")}
+                </td>
 
-      <td className="font-bold">
-  {product.stock}
-</td>
+                <td className="px-4 py-3 text-zinc-300">{product.stock} pcs</td>
 
-      <td className="font-bold">
-        Rp {product.price.toLocaleString("id-ID")}
-      </td>
-      <td>
-  <span
-    className={`rounded-lg px-3 py-2 text-sm font-bold ${
-      product.stock > 10
-        ? "bg-green-600"
-        : product.stock > 0
-        ? "bg-yellow-500 text-black"
-        : "bg-red-600"
-    }`}
-  >
-    {product.stock} pcs
-  </span>
-</td>
+                <td className="px-4 py-3">
+                  {product.stock > 10 ? (
+                    <span className="rounded-lg bg-green-600 px-3 py-1 text-xs font-bold whitespace-nowrap">
+                      READY
+                    </span>
+                  ) : product.stock > 0 ? (
+                    <span className="rounded-lg bg-yellow-500 px-3 py-1 text-xs font-bold text-black whitespace-nowrap">
+                      STOCK MENIPIS
+                    </span>
+                  ) : (
+                    <span className="rounded-lg bg-red-600 px-3 py-1 text-xs font-bold whitespace-nowrap">
+                      SOLD OUT
+                    </span>
+                  )}
+                </td>
 
-      <td>
-        <div className="flex gap-3">
-          <Link
-            href={`/admin/products?id=${product.id}`}
-            className="rounded-lg bg-yellow-500 px-4 py-2 font-bold text-black"
-          >
-            ✏ Edit
-          </Link>
+                <td className="relative px-4 py-3 text-right">
 
-          <button
-            onClick={() => handleDelete(product.id)}
-            className="rounded-lg bg-red-600 px-4 py-2 font-bold"
-          >
-            🗑 Hapus
-          </button>
-        </div>
-      </td>
-    </tr>
-  ))}
-</tbody>
+                  <button
+                    onClick={() =>
+                      setOpenMenu(
+                        openMenu === product.id ? null : product.id
+                      )
+                    }
+                    className="rounded-lg border border-zinc-700 px-3 py-1.5 text-[#FFFAF0]"
+                  >
+                    ⋮
+                  </button>
+
+                  {openMenu === product.id && (
+                    <div className="absolute right-4 top-11 z-10 w-40 rounded-xl border border-zinc-700 bg-[#1b1b1b] p-2 text-left shadow-2xl">
+
+                      <Link
+                        href={`/admin/products?id=${product.id}`}
+                        className="block rounded-lg px-3 py-2 text-yellow-400 hover:bg-zinc-800"
+                      >
+                        ✏ Edit
+                      </Link>
+
+                      <button
+                        onClick={() => handleDelete(product.id)}
+                        className="mt-1 w-full rounded-lg px-3 py-2 text-left text-red-500 hover:bg-zinc-800"
+                      >
+                        🗑 Hapus
+                      </button>
+
+                    </div>
+                  )}
+
+                </td>
+
+              </tr>
+
+            ))}
+
+            {filteredProducts.length === 0 && (
+              <tr>
+                <td
+                  colSpan={9}
+                  className="px-4 py-10 text-center text-sm text-zinc-500"
+                >
+                  Belum ada produk yang cocok.
+                </td>
+              </tr>
+            )}
+
+          </tbody>
+
         </table>
-      )}
+
+      </div>
+
     </div>
   );
 }

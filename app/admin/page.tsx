@@ -1,5 +1,6 @@
 import SalesChart from "../components/SalesChart";
 import { prisma } from "@/app/lib/prisma";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 export default async function AdminDashboard() {
@@ -121,7 +122,10 @@ const latestOrders = await prisma.order.findMany({
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-7">
 
-        <div className="rounded-2xl bg-zinc-900 p-6">
+        <Link
+          href="/admin/products"
+          className="rounded-2xl bg-zinc-900 p-6 transition hover:bg-zinc-800"
+        >
           <p className="text-zinc-400">
             Total Produk
           </p>
@@ -129,9 +133,12 @@ const latestOrders = await prisma.order.findMany({
           <h2 className="mt-3 text-4xl font-black">
             {totalProducts}
           </h2>
-        </div>
+        </Link>
 
-        <div className="rounded-2xl bg-zinc-900 p-6">
+        <Link
+          href="/admin/orders"
+          className="rounded-2xl bg-zinc-900 p-6 transition hover:bg-zinc-800"
+        >
           <p className="text-zinc-400">
             Total Order
           </p>
@@ -139,7 +146,7 @@ const latestOrders = await prisma.order.findMany({
           <h2 className="mt-3 text-4xl font-black">
             {totalOrders}
           </h2>
-        </div>
+        </Link>
 
         <div className="rounded-2xl bg-zinc-900 p-6">
           <p className="text-zinc-400">
@@ -169,29 +176,30 @@ const latestOrders = await prisma.order.findMany({
           <h2 className="mt-3 text-4xl font-black">
             {soldOut}
           </h2>
-          <div className="rounded-2xl bg-blue-700 p-6">
+        </div>
 
-  <p className="text-blue-100">
-    Revenue Hari Ini
-  </p>
+        <div className="rounded-2xl bg-blue-700 p-6">
 
-  <h2 className="mt-3 text-2xl font-black">
-    Rp {(revenueToday._sum.total ?? 0).toLocaleString("id-ID")}
-  </h2>
+          <p className="text-blue-100">
+            Revenue Hari Ini
+          </p>
 
-</div>
+          <h2 className="mt-3 text-2xl font-black">
+            Rp {(revenueToday._sum.total ?? 0).toLocaleString("id-ID")}
+          </h2>
 
-<div className="rounded-2xl bg-purple-700 p-6">
+        </div>
 
-  <p className="text-purple-100">
-    Revenue Bulan Ini
-  </p>
+        <div className="rounded-2xl bg-purple-700 p-6">
 
-  <h2 className="mt-3 text-2xl font-black">
-    Rp {(revenueMonth._sum.total ?? 0).toLocaleString("id-ID")}
-  </h2>
+          <p className="text-purple-100">
+            Revenue Bulan Ini
+          </p>
 
-</div>
+          <h2 className="mt-3 text-2xl font-black">
+            Rp {(revenueMonth._sum.total ?? 0).toLocaleString("id-ID")}
+          </h2>
+
         </div>
 
       </div>

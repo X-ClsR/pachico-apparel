@@ -16,8 +16,45 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PACHICO",
-  description: "Premium Streetwear Apparel",
+  metadataBase: new URL("https://pachico.co.id"),
+  title: {
+    default: "PACHICO | Premium Streetwear Apparel",
+    template: "%s | PACHICO",
+  },
+  description:
+    "Pachico Apparel — brand streetwear lokal dengan kualitas premium: kaos, hoodie, jersey, dan koleksi apparel eksklusif lainnya.",
+  keywords: [
+    "pachico",
+    "streetwear",
+    "kaos distro",
+    "hoodie premium",
+    "apparel lokal",
+    "baju streetwear indonesia",
+  ],
+  openGraph: {
+    title: "PACHICO | Premium Streetwear Apparel",
+    description:
+      "Brand streetwear lokal dengan kualitas premium: kaos, hoodie, jersey, dan koleksi apparel eksklusif lainnya.",
+    url: "https://pachico.co.id",
+    siteName: "PACHICO",
+    images: [
+      {
+        url: "/images/logo/pachico-logo.png",
+        width: 512,
+        height: 512,
+        alt: "Pachico Apparel",
+      },
+    ],
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "PACHICO | Premium Streetwear Apparel",
+    description:
+      "Brand streetwear lokal dengan kualitas premium: kaos, hoodie, jersey, dan koleksi apparel eksklusif lainnya.",
+    images: ["/images/logo/pachico-logo.png"],
+  },
 };
 
 export default function RootLayout({
